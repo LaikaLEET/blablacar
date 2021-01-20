@@ -2,21 +2,63 @@ import java.io.*;
 import java.util.ArrayList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import java.util.Scanner;
+
+
 
 public class Search {
     public static void main(String[] args) throws IOException, InterruptedException {
         //Код для нахождения пакетов на сайте https://security-tracker.debian.org/tracker/data/json
+        BufferedReader bufferedReader = new BufferedReader(new FileReader("normalno1.json"));
+        int i = 0;
+        ArrayList<String> In = new ArrayList<String>();
+        String S = "";
+        int symbol = bufferedReader.read();
+        while (symbol != -1) {  // Когда дойдём до конца файла, получим '-1'
+            // Что-то делаем с прочитанным символом
+            // Преобразовать в char:
+            // char c = (char) symbol;
+            symbol = bufferedReader.read(); // Читаем символ
+            char c = (char) symbol;
+            if (c != '\n') {
+                S = S + c;
+            }
+            else
+            {
+                In.add(S);
+                S = "";
+                i++;
+            }
 
-        String url = "https://security-tracker.debian.org/tracker/data/json";
-        Document doc = Jsoup.connect(url).ignoreContentType(true).userAgent("Mozilla").get();
+//            for (i = 0 ; i < In.size() ; i++)
+//            {
+//                System.out.println(In.get(i));
+//            }
+
+
+        }
+//        Scanner scan = new Scanner(reader);
+//        String url = "https://security-tracker.debian.org/tracker/data/json";
+//        Document doc = Jsoup.connect(url).ignoreContentType(true).userAgent("Mozilla").get();
+        String Name_text = " ";
         ArrayList<String> Version = new ArrayList<String>();
         ArrayList<String> OnlyName = new ArrayList<String>();
         ArrayList<String> Version_new = new ArrayList<String>();
         ArrayList<String> Version_last = new ArrayList<String>();
         ArrayList<String> OnlyName_new = new ArrayList<String>();
         ArrayList<String> Result_list = new ArrayList<String>();
-        String Name_text = doc.body().text();
-        String Version_text = doc.body().text();
+//        while (scan.hasNextLine()){
+//            Name_text += scan.nextLine();
+////            System.out.println(scan.nextLine());
+//        }
+//        String Name_text = doc.body().text();
+//        String test = Name_text;
+        //Gson gson = new Gson();
+        // test = gson.toJson(doc.body().text());
+//        System.out.println(Name_text);
+        //JsonElement ar = new JsonParser().parse();
+
+        String Version_text = "";
         String result_name = "1";
         String result_vers = " ";
         Name_text = Name_text.substring(1);
@@ -78,7 +120,7 @@ public class Search {
         //Добавление разбиения на имя и версию. Нашел базу данных, где подобное разбиение по-умолчанию. https://security-tracker.debian.org/tracker/DSA-3638-1 - пример уязвимого пакета
         FileWriter writer = new FileWriter("sources.txt", false);
         FileWriter writer1 = new FileWriter("sources1.txt", false);
-        for (int i = 0; i < Len; i++) {
+        for (i = 0; i < Len; i++) {
             s = Names.get(i);
             String version = s.substring(s.indexOf("\t"));
             Version.add(version);
@@ -105,16 +147,16 @@ public class Search {
             Version_new.set(j, Version_new.get(j).replaceAll("[^\\d.]", ""));
             Version_new.set(j, Version_new.get(j).replaceAll("\\.", ""));
             OnlyName_new.set(j,name.replace("\"", ""));
-            writer1.write(name+"\n");
+            writer1.write(Version_last.get(j)+"\n");
             //System.out.println(OnlyName_new.get(j));
         }
         Integer count = 0;
-        for (int i = 0; i < Len; i++) {
+        for (i = 0; i < Len; i++) {
             for (int j = 0; j < Len_vers; j++) {
                 if (OnlyName.get(i).equals(OnlyName_new.get(j))){
                     Long vers1 = Long.valueOf(Version.get(i));
                     Long vers2 = Long.valueOf(Version_new.get(j));
-                    System.out.println(Version.get(i) + "\t" + Version_new.get(j));
+                    //System.out.println(Version.get(i) + "\t" + Version_new.get(j));
                     if(vers1 < vers2){
                         count ++;
                         Result_list.add("Package:"+OnlyName_new.get(j) + " Version:" + Version_last.get(j));
@@ -129,7 +171,7 @@ public class Search {
 //        Version_new.retainAll(Version);
         System.out.println("Пакеты и версии, которые нужно установить для устранения неуязвимостей");
         Integer Len_result = Result_list.size();
-        for (int i = 0; i < Len_result; i++) {
+        for (i = 0; i < Len_result; i++) {
             System.out.println(i+1 + ") " + Result_list.get(i));
         }
         writer.close();
