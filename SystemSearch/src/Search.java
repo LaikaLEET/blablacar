@@ -9,8 +9,14 @@ import java.util.Scanner;
 public class Search {
     public static void main(String[] args) throws IOException, InterruptedException {
         //Код для нахождения пакетов на сайте https://security-tracker.debian.org/tracker/data/json
-        BufferedReader bufferedReader = new BufferedReader(new FileReader("data.txt"));
-        int i = 0;
+        ArrayList<String> Version = new ArrayList<String>();
+        ArrayList<String> OnlyName = new ArrayList<String>();
+        ArrayList<String> Version_new = new ArrayList<String>();
+        ArrayList<String> Version_last = new ArrayList<String>();
+        ArrayList<String> OnlyName_new = new ArrayList<String>();
+        ArrayList<String> Result_list = new ArrayList<String>();
+        BufferedReader bufferedReader = new BufferedReader(new FileReader("new.txt"));
+        int i1 = 0;
         ArrayList<String> In = new ArrayList<String>();
         String S = "";
         int symbol = bufferedReader.read();
@@ -25,28 +31,30 @@ public class Search {
             } else {
                 In.add(S);
                 S = "";
-                i++;
+                i1++;
             }
         }
 
-            for (i = 0 ; i < In.size() ; i++)
-            {
-                String L = In.get(i);
-                System.out.println(L);
-            }
+        for (int i = 0 ; i < In.size() ; i++) {
+            String L = In.get(i);
+            //System.out.println(L);
 
-
-
+//            String NM = In.get(i).substring(0, In.get(i).indexOf("/"));
+//
+//            String Ver = In.get(i).substring(In.get(i).indexOf("/"));
+            String[] str_array = In.get(i).split("/");
+            //System.out.println(str_array[0]);
+            OnlyName_new.add(str_array[0]);
+            Version_new.add(str_array[1]);
+            System.out.println(OnlyName_new.get(i));
+            System.out.println("\n");
+            System.out.println(Version_new.get(i));
+        }
 //        Scanner scan = new Scanner(reader);
 //        String url = "https://security-tracker.debian.org/tracker/data/json";
 //        Document doc = Jsoup.connect(url).ignoreContentType(true).userAgent("Mozilla").get();
         String Name_text = " ";
-        ArrayList<String> Version = new ArrayList<String>();
-        ArrayList<String> OnlyName = new ArrayList<String>();
-        ArrayList<String> Version_new = new ArrayList<String>();
-        ArrayList<String> Version_last = new ArrayList<String>();
-        ArrayList<String> OnlyName_new = new ArrayList<String>();
-        ArrayList<String> Result_list = new ArrayList<String>();
+
 //        while (scan.hasNextLine()){
 //            Name_text += scan.nextLine();
 ////            System.out.println(scan.nextLine());
@@ -120,7 +128,7 @@ public class Search {
         //Добавление разбиения на имя и версию. Нашел базу данных, где подобное разбиение по-умолчанию. https://security-tracker.debian.org/tracker/DSA-3638-1 - пример уязвимого пакета
         FileWriter writer = new FileWriter("sources.txt", false);
         FileWriter writer1 = new FileWriter("sources1.txt", false);
-        for (i = 0; i < Len; i++) {
+        for (int i = 0; i < Len; i++) {
             s = Names.get(i);
             String version = s.substring(s.indexOf("\t"));
             Version.add(version);
@@ -151,7 +159,7 @@ public class Search {
             //System.out.println(OnlyName_new.get(j));
         }
         Integer count = 0;
-        for (i = 0; i < Len; i++) {
+        for (int i = 0; i < Len; i++) {
             for (int j = 0; j < Len_vers; j++) {
                 if (OnlyName.get(i).equals(OnlyName_new.get(j))){
                     Long vers1 = Long.valueOf(Version.get(i));
@@ -171,7 +179,7 @@ public class Search {
 //        Version_new.retainAll(Version);
         System.out.println("Пакеты и версии, которые нужно установить для устранения неуязвимостей");
         Integer Len_result = Result_list.size();
-        for (i = 0; i < Len_result; i++) {
+        for (int i = 0; i < Len_result; i++) {
             System.out.println(i+1 + ") " + Result_list.get(i));
         }
         writer.close();
@@ -181,5 +189,3 @@ public class Search {
 
     }
 }
-
-
