@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Search {
     public static void main(String[] args) throws IOException, InterruptedException {
         //Код для нахождения пакетов на сайте https://security-tracker.debian.org/tracker/data/json
-        BufferedReader bufferedReader = new BufferedReader(new FileReader("normalno1.json"));
+        BufferedReader bufferedReader = new BufferedReader(new FileReader("data.txt"));
         int i = 0;
         ArrayList<String> In = new ArrayList<String>();
         String S = "";
@@ -22,21 +22,21 @@ public class Search {
             char c = (char) symbol;
             if (c != '\n') {
                 S = S + c;
-            }
-            else
-            {
+            } else {
                 In.add(S);
                 S = "";
                 i++;
             }
-
-//            for (i = 0 ; i < In.size() ; i++)
-//            {
-//                System.out.println(In.get(i));
-//            }
-
-
         }
+
+            for (i = 0 ; i < In.size() ; i++)
+            {
+                String L = In.get(i);
+                System.out.println(L);
+            }
+
+
+
 //        Scanner scan = new Scanner(reader);
 //        String url = "https://security-tracker.debian.org/tracker/data/json";
 //        Document doc = Jsoup.connect(url).ignoreContentType(true).userAgent("Mozilla").get();
